@@ -15,6 +15,7 @@ function Bundle() {
 *
 *
 **/
+
 Bundle.prototype.addEntry = function(signatureMessageLength, address, value, tag, timestamp, index) {
 
     for (var i = 0; i < signatureMessageLength; i++) {
@@ -91,11 +92,12 @@ Bundle.prototype.finalize = function() {
             lastIndexTrits[lastIndexTrits.length] = 0;
         }
 
-        curl.absorb(Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].tag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits)));
+        var bundleEssence = Converter.trits(this.bundle[i].address + Converter.trytes(valueTrits) + this.bundle[i].tag + Converter.trytes(timestampTrits) + Converter.trytes(currentIndexTrits) + Converter.trytes(lastIndexTrits));
+        curl.absorb(bundleEssence, 0, bundleEssence.length);
     }
 
     var hash = [];
-    curl.squeeze(hash);
+    curl.squeeze(hash, 0, Curl.HASH_LENGTH);
     hash = Converter.trytes(hash);
 
     for (var i = 0; i < this.bundle.length; i++) {

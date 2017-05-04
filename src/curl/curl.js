@@ -97,4 +97,6 @@ Curl.prototype.transform = function() {
     }
 }
 
+Curl.HASH_LENGTH = 243;
+
 module.exports = Curl
