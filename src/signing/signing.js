@@ -26,19 +26,19 @@ var key = function(seed, index, length) {
 
     var curl = new Curl();
     curl.initialize();
-    curl.absorb(subseed);
-    curl.squeeze(subseed);
+    curl.absorb(subseed, 0, subseed.length);
+    curl.squeeze(subseed, 0, Curl.HASH_LENGTH);
 
     curl.initialize();
-    curl.absorb(subseed);
+    curl.absorb(subseed, 0, subseed.length);
 
     var key = [], offset = 0, buffer = [];
-
+    
     while (length-- > 0) {
 
         for (var i = 0; i < 27; i++) {
 
-            curl.squeeze(buffer);
+            curl.squeeze(buffer, 0, Curl.HASH_LENGTH);
             for (var j = 0; j < 243; j++) {
 
                 key[offset++] = buffer[j];
@@ -68,8 +68,8 @@ var digests = function(key) {
 
                 var kCurl = new Curl()
                 kCurl.initialize();
-                kCurl.absorb(buffer);
-                kCurl.squeeze(buffer);
+                kCurl.absorb(buffer, 0, buffer.length);
+                kCurl.squeeze(buffer, 0, Curl.HASH_LENGTH);
             }
 
             for (var k = 0; k < 243; k++) {
@@ -81,8 +81,8 @@ var digests = function(key) {
         var curl = new Curl()
 
         curl.initialize();
-        curl.absorb(keyFragment);
-        curl.squeeze(buffer);
+        curl.absorb(keyFragment, 0, keyFragment.length);
+        curl.squeeze(buffer, 0, Curl.HASH_LENGTH);
 
         for (var j = 0; j < 243; j++) {
 
@@ -103,8 +103,8 @@ var address = function(digests) {
     var curl = new Curl();
 
     curl.initialize();
-    curl.absorb(digests);
-    curl.squeeze(addressTrits);
+    curl.absorb(digests, 0, digests.length);
+    curl.squeeze(addressTrits, 0, Curl.HASH_LENGTH);
 
     return addressTrits;
 }
@@ -129,14 +129,14 @@ var digest = function(normalizedBundleFragment, signatureFragment) {
             var jCurl = new Curl();
 
             jCurl.initialize();
-            jCurl.absorb(buffer);
-            jCurl.squeeze(buffer);
+            jCurl.absorb(buffer, 0, buffer.length);
+            jCurl.squeeze(buffer, 0, Curl.HASH_LENGTH);
         }
 
-        curl.absorb(buffer);
+        curl.absorb(buffer, 0, buffer.length);
     }
 
-    curl.squeeze(buffer);
+    curl.squeeze(buffer, 0, Curl.HASH_LENGTH);
 
     return buffer;
 }
@@ -158,8 +158,8 @@ var signatureFragment = function(normalizedBundleFragment, keyFragment) {
         for (var j = 0; j < 13 - normalizedBundleFragment[i]; j++) {
 
             curl.initialize();
-            curl.absorb(hash);
-            curl.squeeze(hash);
+            curl.absorb(hash, 0, hash.length);
+            curl.squeeze(hash, 0, Curl.HASH_LENGTH);
         }
 
         for (var j = 0; j < 243; j++) {
