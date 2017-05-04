@@ -171,6 +171,6 @@ var fromValue= function(value, size) {
 module.exports = {
     trits       : trits,
     trytes      : trytes,
-    value       : value
+    value       : value,
     fromValue   : fromValue,
 };
