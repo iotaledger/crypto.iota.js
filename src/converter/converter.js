@@ -9,7 +9,7 @@ var MAX_TRIT_VALUE = 1;
 var MIN_TRIT_VALUE = -1;
 
 // All possible tryte values
-var trytesAlphabet = "9ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var trytesAlphabet = '9ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 // map of all trits representations
 var trytesTrits = [
@@ -51,7 +51,6 @@ var trytesTrits = [
 *   @returns {Array} trits
 **/
 var trits = function(input, state) {
-
     var trits = state || [];
 
     if (Number.isInteger(input)) {
@@ -59,7 +58,6 @@ var trits = function(input, state) {
         var absoluteValue = input < 0 ? -input : input;
 
         while (absoluteValue > 0) {
-
             var remainder = absoluteValue % 3;
             absoluteValue = Math.floor(absoluteValue / 3);
 
@@ -70,10 +68,9 @@ var trits = function(input, state) {
 
             trits[trits.length] = remainder;
         }
+
         if (input < 0) {
-
             for (var i = 0; i < trits.length; i++) {
-
                 trits[i] = -trits[i];
             }
         }
@@ -88,6 +85,11 @@ var trits = function(input, state) {
         }
     }
 
+    // Remove trailing zero trits
+    while (trits.length > 1 && trits.slice(-1)[0] === 0) {
+        trits.pop();
+    }
+
     return trits;
 }
 
@@ -99,16 +101,21 @@ var trits = function(input, state) {
 *   @returns {String} trytes
 **/
 var trytes = function(trits) {
-
     var trytes = "";
 
     for (var i = 0; i < trits.length; i += 3) {
+        var subTrits = trits.slice(i, i+3);
+        while (subTrits.length < 3) {
+            subTrits.push(0);
+        }
 
         // Iterate over all possible tryte values to find correct trit representation
         for (var j = 0; j < trytesAlphabet.length; j++) {
-
-            if (trytesTrits[j][0] == trits[i] && trytesTrits[j][1] == trits[i + 1] && trytesTrits[j][2] == trits[i + 2]) {
-
+            if (
+                trytesTrits[j][0] == subTrits[0] &&
+                trytesTrits[j][1] == subTrits[1] &&
+                trytesTrits[j][2] == subTrits[2]
+            ) {
                 trytes += trytesAlphabet.charAt(j);
                 break;
             }
@@ -145,11 +152,16 @@ var value = function(trits) {
 *   @param {Number} value
 *   @returns {Array} trits
 **/
-var fromValue= function(value) {
+var fromValue = function(value) {
+    value = Math.floor(value);
+    if (value === 0) {
+        return [0];
+    }
+
     var destination = [];
-    var absoluteValue = value < 0 ? -value : value;
+    var absoluteValue = Math.abs(value);
     var i = 0;
-    while(absoluteValue > 0) {
+    while (absoluteValue > 0) {
         var remainder = (absoluteValue % RADIX);
         absoluteValue = Math.floor(absoluteValue / RADIX);
         if (remainder > MAX_TRIT_VALUE) {
@@ -165,6 +177,7 @@ var fromValue= function(value) {
             destination[i] = destination[i] == 0? 0: -destination[i];
         }
     }
+
     return destination;
 }
 

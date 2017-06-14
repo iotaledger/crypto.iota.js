@@ -1,19 +1,23 @@
 {
-  "name": "crypto.iota.js",
-  "version": "0.0.1",
-  "description": "Set of cryptographic functions utilized in IOTA",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "iota",
-    "curl",
-    "javascript",
-    "library",
-    "browser",
-    "signing"
-  ],
-  "author": "Dominik Schiener",
-  "license": "MIT "
+    "name": "crypto.iota.js",
+    "version": "0.0.1",
+    "description": "Set of cryptographic functions utilized in IOTA",
+    "main": "lib/index.js",
+    "scripts": {
+        "test": "mocha"
+    },
+    "keywords": [
+        "iota",
+        "curl",
+        "javascript",
+        "library",
+        "browser",
+        "signing"
+    ],
+    "author": "Dominik Schiener",
+    "license": "MIT ",
+    "devDependencies": {
+        "chai": "^4.0.2",
+        "mocha": "^3.4.2"
+    }
 }
